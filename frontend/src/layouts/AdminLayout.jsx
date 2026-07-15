@@ -16,7 +16,7 @@ export default function AdminLayout() {
 
   return (
     <div className="flex min-h-screen bg-paper-dim">
-      <aside className="hidden w-60 flex-col border-r border-ink/10 bg-white px-4 py-6 sm:flex">
+      <aside className="hidden w-60 flex-col border-r border-ink/10 bg-white px-4 py-6 sm:flex h-screen sticky top-0 overflow-y-auto">
         <p className="px-2 font-display text-lg font-bold text-ink">Admin Panel</p>
         <p className="px-2 text-xs text-ink-soft">{user?.email}</p>
 
@@ -45,7 +45,7 @@ export default function AdminLayout() {
         </button>
       </aside>
 
-      <main className="flex-1 p-6 sm:p-10">
+      <main className="flex-1 p-6 sm:p-10 overflow-y-auto h-screen">
         <Outlet />
       </main>
     </div>

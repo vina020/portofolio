@@ -62,7 +62,7 @@ export default function Footer() {
       <div className="mx-auto flex max-w-6xl items-center justify-between border-t border-paper/10 px-6 py-5 text-xs text-paper/40">
         <span>&copy; {new Date().getFullYear()} Vina Nur Aini.</span>
         <Link to="/admin/login" className="flex items-center gap-1 hover:text-paper/70" aria-label="Admin login">
-          <Lock size={12} /> Admin
+          <Lock size={12} />
         </Link>
       </div>
     </footer>
