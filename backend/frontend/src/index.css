@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+@theme {
+  /* ---- Color system, drawn from Vina's own Canva brand palette ---- */
+  --color-ink: #16213e;
+  --color-ink-soft: #4b5670;
+  --color-paper: #fafaf7;
+  --color-paper-dim: #f1efe9;
+
+  --color-gold: #f0b429;       /* Machine Learning */
+  --color-gold-soft: #fdf1d2;
+  --color-sky: #4f96c9;        /* Web Programming */
+  --color-sky-soft: #e3f0f8;
+  --color-coral: #e8717a;      /* Mobile Programming */
+  --color-coral-soft: #fbe6e8;
+  --color-teal: #2fa38a;       /* Data Analysis & Visualization */
+  --color-teal-soft: #e1f2ee;
+  --color-plum: #8b6bb8;       /* Interaction Design */
+  --color-plum-soft: #ece4f5;
+
+  /* ---- Type ---- */
+  --font-display: "Sora", "Segoe UI", sans-serif;
+  --font-body: "Manrope", "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", "Menlo", monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-display);
+}
+
+.font-mono-tag {
+  font-family: var(--font-mono);
+  letter-spacing: 0.06em;
+}
+
+/* visible keyboard focus, kept consistent across the site */
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* swoosh motif used across hero / dividers — echoes the open-circle
+   mark from Vina's own Canva portfolio */
+.brand-swoosh {
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
