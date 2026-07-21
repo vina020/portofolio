@@ -17,7 +17,7 @@ export default function Navbar() {
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <NavLink to="/" className="flex items-center gap-2 font-display text-lg font-bold text-ink">
           <span className="flex h-9 w-9 items-center justify-center rounded-full bg-ink text-sm text-paper">
-            VA
+            V
           </span>
           Vina Nur Aini
         </NavLink>

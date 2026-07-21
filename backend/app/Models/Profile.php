@@ -10,6 +10,7 @@ class Profile extends Model
         'name', 'tagline', 'about', 'vision', 'mission',
         'email', 'phone', 'location', 'linkedin_url', 'github_url',
         'photo_path', 'cv_path',
+        'instagram_url', 'tiktok_url',
     ];
 
     protected $appends = ['photo_url', 'cv_url'];

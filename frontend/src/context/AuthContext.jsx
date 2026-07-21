@@ -35,6 +35,7 @@ export function AuthProvider({ children }) {
     }
     localStorage.removeItem('admin_token')
     setUser(null)
+    window.location.href = '/'
   }
 
   return (

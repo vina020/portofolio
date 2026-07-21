@@ -17,7 +17,7 @@ export default function Login() {
       await login(form.email, form.password)
       navigate('/admin')
     } catch {
-      setError('Email atau password salah.')
+      setError('Email or password is incorrect.')
     } finally {
       setLoading(false)
     }

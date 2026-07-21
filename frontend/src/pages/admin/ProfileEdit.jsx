@@ -71,6 +71,8 @@ export default function ProfileEdit() {
           <Field label="Location" name="location" value={form.location} onChange={handleChange} />
           <Field label="LinkedIn URL" name="linkedin_url" value={form.linkedin_url} onChange={handleChange} />
           <Field label="GitHub URL" name="github_url" value={form.github_url} onChange={handleChange} />
+          <Field label="Instagram URL" name="instagram_url" value={form.instagram_url} onChange={handleChange} />
+          <Field label="TikTok URL" name="tiktok_url" value={form.tiktok_url} onChange={handleChange} />
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">

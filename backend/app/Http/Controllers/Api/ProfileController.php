@@ -33,6 +33,8 @@ class ProfileController extends Controller
             'github_url' => ['nullable', 'string', 'max:255'],
             'photo' => ['nullable', 'image', 'max:4096'],
             'cv' => ['nullable', 'mimes:pdf', 'max:10240'],
+            'instagram_url' => ['nullable', 'string', 'max:255'],
+            'tiktok_url' => ['nullable', 'string', 'max:255'],
         ]);
 
         if ($request->hasFile('photo')) {

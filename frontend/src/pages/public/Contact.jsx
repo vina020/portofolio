@@ -61,7 +61,7 @@ export default function Contact() {
           </button>
 
           {status === 'sent' && (
-            <p className="text-sm font-medium text-teal">Pesan terkirim — thanks, I&apos;ll get back to you soon.</p>
+            <p className="text-sm font-medium text-teal">Message sent — thanks, I&apos;ll get back to you soon.</p>
           )}
           {status === 'error' && Object.keys(errors).length === 0 && (
             <p className="text-sm font-medium text-coral">Something went wrong. Please try again.</p>
