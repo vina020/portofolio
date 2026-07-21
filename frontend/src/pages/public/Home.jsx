@@ -21,10 +21,10 @@ export default function Home() {
         <div className="mx-auto grid max-w-6xl items-center gap-12 px-6 py-20 md:grid-cols-2 md:py-28">
           <div>
             <p className="font-mono-tag text-xs uppercase tracking-wide text-sky">
-              Portfolio — Information Systems
+              Information Systems
             </p>
             <h1 className="mt-4 font-display text-4xl font-bold leading-tight text-ink md:text-5xl">
-              Hi, I&apos;m {profile?.name || 'Vina Nur Aini'}.
+              Hi, I&apos;m {profile?.name || 'Vina Nur Aini'}
             </h1>
             <p className="mt-5 max-w-md text-lg text-ink-soft">
               {profile?.tagline || 'Information Systems Student | Data Analyst | Web Developer'}
