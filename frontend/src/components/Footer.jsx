@@ -1,4 +1,4 @@
-import { Mail, MapPin, Phone, Code2, Link2, Lock, Music2, Camera, BookMarked, Bookmark } from 'lucide-react'
+import { Mail, MapPin, Code2, Link2, Lock, Music2, Camera, BookMarked, Bookmark } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useProfile } from '../hooks/useProfile'
 
@@ -35,11 +35,6 @@ export default function Footer() {
               <li className="flex items-center gap-2">
                 <Mail size={16} className="text-gold" />
                 <a href={`mailto:${profile.email}`} className="hover:text-gold">{profile.email}</a>
-              </li>
-            )}
-            {profile?.phone && (
-              <li className="flex items-center gap-2">
-                <Phone size={16} className="text-gold" /> {profile.phone}
               </li>
             )}
             {profile?.location && (

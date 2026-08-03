@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Mail, MapPin, Phone, Send } from 'lucide-react'
+import { Mail, MapPin, Send } from 'lucide-react'
 import client from '../../api/client'
 import { useProfile } from '../../hooks/useProfile'
 
@@ -72,9 +72,6 @@ export default function Contact() {
           <p className="font-mono-tag text-xs uppercase tracking-wide text-ink-soft">Direct contact</p>
           {profile?.email && (
             <p className="flex items-center gap-2 text-ink"><Mail size={16} className="text-sky" /> {profile.email}</p>
-          )}
-          {profile?.phone && (
-            <p className="flex items-center gap-2 text-ink"><Phone size={16} className="text-sky" /> {profile.phone}</p>
           )}
           {profile?.location && (
             <p className="flex items-center gap-2 text-ink"><MapPin size={16} className="text-sky" /> {profile.location}</p>
