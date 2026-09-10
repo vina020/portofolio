@@ -16,12 +16,12 @@ class Profile extends Model
     protected $appends = ['photo_url', 'cv_url'];
 
     public function getPhotoUrlAttribute(): ?string
-    {
-        return $this->photo_path ? asset('storage/' . $this->photo_path) : null;
-    }
+{
+    return $this->photo_path ?: null;
+}
 
-    public function getCvUrlAttribute(): ?string
-    {
-        return $this->cv_path ? asset('storage/' . $this->cv_path) : null;
-    }
+public function getCvUrlAttribute(): ?string
+{
+    return $this->cv_path ?: null;
+}
 }

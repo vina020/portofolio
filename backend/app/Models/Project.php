@@ -19,18 +19,13 @@ class Project extends Model
         'featured' => 'boolean',
     ];
 
-    protected $appends = ['thumbnail_url', 'gallery_urls'];
-
     public function getThumbnailUrlAttribute(): ?string
-    {
-        return $this->thumbnail_path ? asset('storage/' . $this->thumbnail_path) : null;
-    }
+{
+    return $this->thumbnail_path ?: null;
+}
 
-    public function getGalleryUrlsAttribute(): array
-    {
-        return collect($this->gallery ?? [])
-            ->map(fn ($path) => asset('storage/' . $path))
-            ->values()
-            ->all();
-    }
+public function getGalleryUrlsAttribute(): array
+{
+    return $this->gallery ?? [];
+}
 }

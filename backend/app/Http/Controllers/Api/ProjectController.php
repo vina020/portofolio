@@ -4,12 +4,23 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use Cloudinary\Cloudinary;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ProjectController extends Controller
 {
+    private function cloudinary(): Cloudinary
+    {
+        return new Cloudinary([
+            'cloud' => [
+                'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
+                'api_key'    => env('CLOUDINARY_API_KEY'),
+                'api_secret' => env('CLOUDINARY_API_SECRET'),
+            ],
+        ]);
+    }
+
     public function index(Request $request)
     {
         $query = Project::orderBy('order')->orderByDesc('id');
@@ -24,7 +35,6 @@ class ProjectController extends Controller
     public function show(string $slug)
     {
         $project = Project::where('slug', $slug)->firstOrFail();
-
         return response()->json($project);
     }
 
@@ -34,18 +44,27 @@ class ProjectController extends Controller
         $data['slug'] = $this->uniqueSlug($data['title']);
 
         if ($request->hasFile('thumbnail')) {
-            $data['thumbnail_path'] = $request->file('thumbnail')->store('projects', 'public');
+            $result = $this->cloudinary()->uploadApi()->upload(
+                $request->file('thumbnail')->getRealPath(),
+                ['folder' => 'portfolio/projects', 'resource_type' => 'image']
+            );
+            $data['thumbnail_path'] = $result['secure_url'];
         }
 
         if ($request->hasFile('gallery')) {
             $data['gallery'] = collect($request->file('gallery'))
-                ->map(fn ($file) => $file->store('projects', 'public'))
+                ->map(function ($file) {
+                    $result = $this->cloudinary()->uploadApi()->upload(
+                        $file->getRealPath(),
+                        ['folder' => 'portfolio/projects', 'resource_type' => 'image']
+                    );
+                    return $result['secure_url'];
+                })
                 ->values()
                 ->all();
         }
 
         $project = Project::create($data);
-
         return response()->json($project, 201);
     }
 
@@ -58,68 +77,65 @@ class ProjectController extends Controller
         }
 
         if ($request->hasFile('thumbnail')) {
-            if ($project->thumbnail_path) {
-                Storage::disk('public')->delete($project->thumbnail_path);
-            }
-            $data['thumbnail_path'] = $request->file('thumbnail')->store('projects', 'public');
+            $result = $this->cloudinary()->uploadApi()->upload(
+                $request->file('thumbnail')->getRealPath(),
+                ['folder' => 'portfolio/projects', 'resource_type' => 'image']
+            );
+            $data['thumbnail_path'] = $result['secure_url'];
         }
 
         if ($request->hasFile('gallery')) {
-            foreach ($project->gallery ?? [] as $oldImage) {
-                Storage::disk('public')->delete($oldImage);
-            }
             $data['gallery'] = collect($request->file('gallery'))
-                ->map(fn ($file) => $file->store('projects', 'public'))
+                ->map(function ($file) {
+                    $result = $this->cloudinary()->uploadApi()->upload(
+                        $file->getRealPath(),
+                        ['folder' => 'portfolio/projects', 'resource_type' => 'image']
+                    );
+                    return $result['secure_url'];
+                })
                 ->values()
                 ->all();
         }
 
         $project->update($data);
-
         return response()->json($project->fresh());
     }
 
     public function destroy(Project $project)
     {
-        if ($project->thumbnail_path) {
-            Storage::disk('public')->delete($project->thumbnail_path);
-        }
-        foreach ($project->gallery ?? [] as $image) {
-            Storage::disk('public')->delete($image);
-        }
         $project->delete();
-
         return response()->json(['message' => 'Deleted']);
     }
 
     private function validateData(Request $request): array
     {
         $data = $request->validate([
-            'title' => ['required', 'string', 'max:255'],
-            'category' => ['required', 'string', 'max:255'],
-            'summary' => ['nullable', 'string', 'max:500'],
+            'title'       => ['required', 'string', 'max:255'],
+            'category'    => ['required', 'string', 'max:255'],
+            'summary'     => ['nullable', 'string', 'max:500'],
             'description' => ['nullable', 'string'],
-            'tools' => ['nullable'],
+            'tools'       => ['nullable'],
             'key_results' => ['nullable'],
             'project_url' => ['nullable', 'string', 'max:255'],
-            'featured' => ['nullable'],
-            'order' => ['nullable', 'integer'],
-            'thumbnail' => ['nullable', 'image', 'max:4096'],
-            'gallery' => ['nullable', 'array'],
-            'gallery.*' => ['image', 'max:4096'],
+            'featured'    => ['nullable'],
+            'order'       => ['nullable', 'integer'],
+            'thumbnail'   => ['nullable', 'image', 'max:4096'],
+            'gallery'     => ['nullable', 'array'],
+            'gallery.*'   => ['image', 'max:4096'],
         ]);
 
-        // tools / key_results may arrive as JSON strings (multipart form data)
         foreach (['tools', 'key_results'] as $field) {
             if (isset($data[$field]) && is_string($data[$field])) {
                 $decoded = json_decode($data[$field], true);
-                $data[$field] = is_array($decoded) ? $decoded : array_filter(array_map('trim', explode("\n", $data[$field])));
+                $data[$field] = is_array($decoded)
+                    ? $decoded
+                    : array_filter(array_map('trim', explode("\n", $data[$field])));
             }
         }
 
-        $data['featured'] = $request->boolean('featured');
+        $data['featured'] = filter_var($request->input('featured'), FILTER_VALIDATE_BOOLEAN);
 
-        unset($data['gallery']); // handled separately as files
+        unset($data['gallery']);
 
         return $data;
     }
@@ -132,7 +148,7 @@ class ProjectController extends Controller
 
         while (
             Project::where('slug', $slug)
-                ->when($ignoreId, fn ($q) => $q->where('id', '!=', $ignoreId))
+                ->when($ignoreId, fn($q) => $q->where('id', '!=', $ignoreId))
                 ->exists()
         ) {
             $slug = $base . '-' . (++$i);
